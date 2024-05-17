@@ -46,3 +46,30 @@ install.txt
 Thumbs.db
 
 ssh-keys
+
+# Helm chart dependencies
+charts/
+tmpcharts/
+
+# Values files that may contain sensitive data or local configurations
+*values.yaml
+!values.yaml
+values*.yaml
+secrets.yaml
+
+# Ignore saved Helm repository index files
+**/index.yaml
+
+# Ignore Helm packaging output
+*.tgz
+
+# Ignore any override files that might be used locally
+override.yaml
+
+# Mac OS file system files
+.DS_Store
+
+# Ignore IDE and editor folders
+.idea/
+.vscode/
+*.swp

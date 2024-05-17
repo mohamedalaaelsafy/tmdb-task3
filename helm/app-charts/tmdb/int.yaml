@@ -16,7 +16,7 @@ base-chart:
 
   deployment:
     annotations: {}
-    image: us-central1-docker.pkg.dev/hamzahllc-technical-task/tmdb-tasks
+    image: us-central1-docker.pkg.dev/hamzahllc-technical-task/tmdb-tasks/tmdb-app
     tag: latest
     restartPolicy: Always
     serviceAccountName: {}

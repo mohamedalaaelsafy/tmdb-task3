@@ -4,7 +4,7 @@ metadata:
   name: tmdb-application
   namespace: argocd
 spec:
-  project: tmdb-project  
+  project: default
   destination:
     server: https://kubernetes.default.svc
   syncPolicy:
@@ -15,7 +15,7 @@ spec:
   sources:
   - repoURL: 'https://github.com/mohamedalaaelsafy/tmdb-task3.git'
     targetRevision: HEAD
-    path: helm/app-charts/tbdm
+    path: helm/app-charts/tmdb
     helm:
       releaseName: tmdb-app
       valueFiles:
