@@ -6,7 +6,9 @@ base-chart:
     ingressClassName: nginx
     name: tmdb-ing
     namespace: int
-    annotations: {}
+    annotations: 
+      kubernetes.io/ingress.class: "nginx"
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
     rules:
     - host: tmdb.ma-devops.com
       paths:
