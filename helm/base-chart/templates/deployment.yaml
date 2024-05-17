@@ -1,0 +1,111 @@
+{{- if .Values.deployment }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace | lower }}
+  labels:
+    app: {{ .Values.name }}
+    {{- if .Values.deployment.annotations }}
+  annotations:
+    {{- toYaml .Values.deployment.annotations | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.deployment.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      {{- if .Values.deployment.securityContext }}
+      securityContext:
+        fsGroup: {{ .Values.deployment.securityContext.fsGroup  }}
+        runAsUser: {{ .Values.deployment.securityContext.runAsUser }}
+      {{- end }}
+      {{- if .Values.deployment.tolerations }}
+      tolerations:
+      {{- range $value := .Values.deployment.tolerations }}
+      - key: {{ $value.key }}
+        operator: {{ $value.operator }}
+        value: {{ $value.value }}
+        effect: {{ $value.effect }}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.deployment.nodeSelector }}
+      nodeSelector:
+        type: {{ .Values.deployment.nodeSelector.type }}
+      {{- end }}
+      containers:
+      - image: {{ .Values.deployment.image }}:{{ .Values.deployment.tag }}
+        imagePullPolicy: {{ .Values.deployment.pullPolicy | default  "Always"}}
+        name: {{ .Values.name }}
+        {{- if .Values.deployment.resources }}
+        resources:
+        {{- toYaml .Values.deployment.resources | nindent 10 }}
+        {{- end }}
+        {{- if .Values.deployment.command }}
+        command: {{ .Values.deployment.command }}
+        {{- end }}
+        {{- if .Values.deployment.args }}
+        args: {{ .Values.deployment.args }}
+        {{- end }}
+
+        {{- if .Values.deployment.env }}
+        env:
+        {{- range $value := .Values.deployment.env }}
+        - name: {{ $value.name }}
+          value: {{ $value.value }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.deployment.ports }}
+        ports:
+        {{- range $value := .Values.deployment.ports }}
+        - containerPort: {{ $value.containerPort }}
+        {{- if $value.name }}
+          name: {{ $value.name }}
+        {{- end }}
+        {{- end }}
+        {{- end }}
+      {{- if and (.Values.deployment.volumeMounts) (.Values.deployment.volumes) }}
+        volumeMounts:
+        {{- range $value := .Values.deployment.volumeMounts }}
+        - name: {{ $value.name }}
+          mountPath: {{ $value.mountPath }}
+          {{- if $value.subPath }}
+          subPath: {{ $value.subPath }}
+          {{- end }}
+          {{- if $value.readOnly }}
+          readOnly: {{ $value.readOnly }}
+          {{- end }}
+        {{- end }}
+      {{- if .Values.deployment.restartPolicy }}   
+      restartPolicy: {{ .Values.deployment.restartPolicy | default  "Always"}}
+      {{- end }}
+      {{- if .Values.deployment.serviceAccountName }}
+      serviceAccountName: {{ .Values.deployment.serviceAccountName }} 
+      {{- end }}               
+      volumes:
+        {{- range $value := .Values.deployment.volumes }}
+        - name: {{ $value.name }}
+        {{- if $value.secret }}
+          secret:
+            secretName: {{ $value.secret.secretName }}
+        {{- else if $value.configMap }}
+          configMap:
+            name: {{ $value.configMap.name }}
+        {{- else if $value.emptyDir }}
+          emptyDir: {{ $value.emptyDir }}
+        {{- else if $value.persistentVolumeClaim }}
+          persistentVolumeClaim:
+            claimName: {{ $value.persistentVolumeClaim.claimName }}
+        {{- else if $value.hostPath }}
+          hostPath:
+            path: {{ $value.hostPath.path }}
+        {{- end }}   
+        {{- end }}
+      {{- end }}
+---
+{{- end }}

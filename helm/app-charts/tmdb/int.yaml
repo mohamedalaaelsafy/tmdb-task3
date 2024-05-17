@@ -1,0 +1,44 @@
+base-chart:
+  name: tmdb-app
+  namespace: int
+
+  ingress:
+    ingressClassName: nginx
+    name: tmdb-ing
+    namespace: int
+    annotations: {}
+    rules:
+    - host: tmdb.ma-devops.com
+      paths:
+        - path: /
+          service: tmdb-svc
+          port: 80
+
+  deployment:
+    annotations: {}
+    image: us-central1-docker.pkg.dev/hamzahllc-technical-task/tmdb-tasks
+    tag: latest
+    restartPolicy: Always
+    serviceAccountName: {}
+    resources:
+      requests:
+        cpu: 30m
+        memory: 10Mi
+      limits:
+        cpu: 100m
+        memory: 300Mi
+    ports:
+    - name: app-port
+      containerPort: 80
+
+  service:
+    name: tmdb-svc
+    labels: {}
+    selector:
+      app: wep-app  
+    type: ClusterIP
+    ports:
+    - protocol: TCP
+      port: 80
+      targetPort: app-port
+
