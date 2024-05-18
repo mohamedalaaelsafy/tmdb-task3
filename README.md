@@ -28,7 +28,7 @@ This repository contains the code and configurations for automating infrastructu
    - Install ArgoCD and configure NGINX Ingress.
 
 4. **ArgoCD Application Sync:**
-   - Automatically sync and deploy microservices from `./helm/app-charts/` which contain our deployments (eg: frontend/backend).
+   - Automatically sync and deploy microservices from `./helm/app-charts/` which contain our deployments (eg: frontend/backend) to our `cluster`.
 
 ## Tmdb App and ArgoCD Domains
 
