@@ -33,7 +33,7 @@ base-chart:
       httpGet:
         path: /
         port: 3000
-      initialDelaySeconds: 240
+      initialDelaySeconds: 60
     ports:
     - name: app-port
       containerPort: 3000
