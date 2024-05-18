@@ -34,19 +34,6 @@ jobs:
             TF_DIR="./terraform/envs/${INPUT_TF_DIR,,}"
             echo "TF_DIR=${TF_DIR}" >> $GITHUB_OUTPUT
 
-      - name: Decode GCP Service Account Key
-        run: echo "${{ secrets.GCP_SA_KEY_BASE64 }}" | base64 --decode > $HOME/gcp_key.json
-
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
-        with:
-          service_account: $HOME/gcp_key.json
-          credentials_json: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-      
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v0.6.0'
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
