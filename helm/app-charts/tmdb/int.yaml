@@ -27,7 +27,7 @@ base-chart:
         cpu: 30m
         memory: 10Mi
       limits:
-        cpu: 200m
+        cpu: 500m
         memory: 800Mi
     livenessProbe:
       httpGet:
