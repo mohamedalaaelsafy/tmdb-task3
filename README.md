@@ -16,7 +16,7 @@ This repository contains the code and configurations for automating infrastructu
 
 ## Tools Used
 
-- **Google Cloud Platform (GCP):** Cloud provider for hosting the infrastructure and Kubernetes clusters.
+- **Google Cloud Platform (GCP):** Cloud provider for hosting the infrastructure and Kubernetes clusters [Project URL](https://console.cloud.google.com/welcome?project=hamzahllc-technical-task&supportedpurview=project).
 - **Google Kubernetes Engine (GKE):** Managed Kubernetes service for containerized applications.
 - **Helm:** Package manager for Kubernetes to manage and deploy applications.
 - **ArgoCD:** Continuous Delivery tool for Kubernetes to automate application deployment and lifecycle management.
