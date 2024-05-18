@@ -65,7 +65,7 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
-          credentials_json: $GOOGLE_CREDENTIALS
+          credentials_json:  ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Terraform Init
         id: init
