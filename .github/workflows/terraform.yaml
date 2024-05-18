@@ -53,6 +53,8 @@ jobs:
       - name: Check Terraform Directory
         id: test
         run: |
+          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > $HOME/gcp_key.json
+          gcloud auth activate-service-account --key-file=$HOME/gcp_key.json
           gke-gcloud-auth-plugin	
 
       - name: Terraform Init
