@@ -34,6 +34,19 @@ jobs:
             TF_DIR="./terraform/envs/${INPUT_TF_DIR,,}"
             echo "TF_DIR=${TF_DIR}" >> $GITHUB_OUTPUT
 
+      - name: Decode GCP Service Account Key
+        run: echo "${{ secrets.GCP_SA_KEY_BASE64 }}" | base64 --decode > $HOME/gcp_key.json
+
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          service_account: $HOME/gcp_key.json
+          credentials_json: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0.6.0'
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -49,16 +62,6 @@ jobs:
             echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
             curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
             sudo apt-get update && sudo apt-get install -y google-cloud-sdk google-cloud-sdk-gke-gcloud-auth-plugin
-
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
-        with:
-          service_account: ${{ secrets.GOOGLE_CREDENTIALS }}
-          credentials_json: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-      
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v0.6.0'
 
       - name: Terraform Init
         id: init
