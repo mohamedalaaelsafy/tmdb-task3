@@ -8,7 +8,7 @@ This repository contains the code and configurations for automating infrastructu
 - **application:** Contains the project's application code.
 - **terraform:**
   - **modules:** Terraform modules for infrastructure provisioning (e.g., installing ArgoCD, configuring Ingress).
-  - **tenvs:** Environment-specific configurations (e.g., 'int' for integration environment).
+  - **envs:** Environment-specific directory configurations (e.g., 'int' for integration environment).
 - **helm:**
   - **base-chart:** Base Helm chart for all microservices.
   - **apps-chart:** Helm charts for individual microservices, built upon the base chart.
