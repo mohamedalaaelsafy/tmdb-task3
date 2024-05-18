@@ -82,7 +82,17 @@ All these resources are considered in the `helm base chart`.
 3. **Sync:**
 - the deployemnt will sync automatically with the power of `ArgoCD tool`.
 
+## Cluster Connection and ArgoCD Credentials
 
+- **Cluster Connection Details:**
+  - To connect to the GCP Kubernetes cluster, use the appropriate authentication method: `gcloud container clusters get-credentials tmdb-int-cluster \
+    --region=us-central-1 --project hamzahllc-technical-task`.
+  - Ensure that you have the necessary permissions to interact with the cluster.
+
+- **ArgoCD Username and Password:**
+  - To get the `admin` password you can run `kubectl -n argocd get secret argocd-initial-admin-secret \
+          -o jsonpath="{.data.password}" | base64 -d; echo`.
+    
 ## Additional Notes
 
 - These tasks are intended for technical evaluation purposes and should be managed with best practices in production environments.
