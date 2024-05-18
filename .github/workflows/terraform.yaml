@@ -50,28 +50,11 @@ jobs:
             curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
             sudo apt-get update && sudo apt-get install -y google-cloud-sdk google-cloud-sdk-gke-gcloud-auth-plugin
 
-
- 
-    #   - name: Check Terraform Directory
-    #     id: test
-    #     run: |
-    #         echo $GOOGLE_CREDENTIALS
-    #         echo $GOOGLE_CREDENTIALS > $HOME/gcp_key.json
-    #         cat $HOME/gcp_key.json
-    #         gcloud auth activate-service-account --key-file=$HOME/gcp_key.json
-    #         gcloud config set account $(gcloud auth list --filter=status:ACTIVE --format="value(account)")
-    #         gke-gcloud-auth-plugin
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
-        with:
-          credentials_json:  ${{ secrets.GOOGLE_CREDENTIALS }}
-
       - name: Terraform Init
         id: init
         working-directory: ${{ steps.tf_dir.outputs.TF_DIR }}
         run: terraform init
-        env:
+        env:''
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Terraform Validate
