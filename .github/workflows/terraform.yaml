@@ -62,7 +62,6 @@ jobs:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
     
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/"master"'
         working-directory: ${{ steps.tf_dir.outputs.TF_DIR }}
         run: terraform apply -auto-approve -input=false
         env:
