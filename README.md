@@ -14,6 +14,14 @@ This repository contains the code and configurations for automating infrastructu
   - **apps-chart:** Helm charts for individual microservices, built upon the base chart in our case we have only `tmdb app`.
 - **.github/workflows:** GitHub Actions workflows for automating infrastructure deployment.
 
+## Tools Used
+
+- **Google Cloud Platform (GCP):** Cloud provider for hosting the infrastructure and Kubernetes clusters.
+- **Google Kubernetes Engine (GKE):** Managed Kubernetes service for containerized applications.
+- **Helm:** Package manager for Kubernetes to manage and deploy applications.
+- **ArgoCD:** Continuous Delivery tool for Kubernetes to automate application deployment and lifecycle management.
+- **GitHub Actions:** CI/CD platform for automating workflows and tasks directly from GitHub repositories.
+
 ## Workflow Steps
 
 1. **GitHub Workflow Trigger:**
