@@ -54,7 +54,7 @@ jobs:
         id: init
         working-directory: ${{ steps.tf_dir.outputs.TF_DIR }}
         run: terraform init
-        env:''
+        env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Terraform Validate
