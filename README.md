@@ -11,7 +11,7 @@ This repository contains the code and configurations for automating infrastructu
   - **envs:** Environment-specific directory configurations (e.g., 'int' for integration environment).
 - **helm:**
   - **base-chart:** Base Helm chart for all microservices.
-  - **apps-chart:** Helm charts for individual microservices, built upon the base chart.
+  - **apps-chart:** Helm charts for individual microservices, built upon the base chart in our case we have only `tmdb app`.
 - **.github/workflows:** GitHub Actions workflows for automating infrastructure deployment.
 
 ## Workflow Steps
