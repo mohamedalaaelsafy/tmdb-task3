@@ -46,7 +46,7 @@ All these resources are considered in the `helm base chart`.
 
 
 
-## Inrastructure Instructions
+## Infrastructure Instructions
 
 1. **Clone the Repository:**
 
