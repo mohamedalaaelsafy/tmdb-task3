@@ -37,7 +37,7 @@ base-chart:
     name: tmdb-svc
     labels: {}
     selector:
-      app: wep-app  
+      app: tmdb-app 
     type: ClusterIP
     ports:
     - protocol: TCP
