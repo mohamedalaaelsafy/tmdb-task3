@@ -1,0 +1,75 @@
+name: Terraform Apply
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        type: choice
+        description: "Select Infrastructure Environment"
+        options: 
+          - Int
+          - Prod
+
+env:
+  TERRAFORM_VERSION: "1.8.3"
+  TF_IN_AUTOMATION: "True"
+
+defaults:
+    run:
+      shell: bash
+
+jobs:
+  terraform_apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+
+      - name: Check Terraform Directory
+        id: tf_dir
+        env:
+          INPUT_TF_DIR: ${{ inputs.name }}
+        run: |
+          if [ "$INPUT_TF_DIR" == "Core-infra" ]; then
+            TF_DIR="${INPUT_TF_DIR,,}"
+            echo "TF_DIR=${TF_DIR}" >> $GITHUB_OUTPUT
+          else
+            TF_DIR="./configs/${INPUT_TF_DIR,,}"
+            echo "TF_DIR=${TF_DIR}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
+      - name: Terraform Init
+        id: init
+        working-directory: ${{ steps.tf_dir.outputs.TF_DIR }}
+        run: terraform init
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
+      - name: Terraform Validate
+        working-directory: ${{ steps.tf_dir.outputs.TF_DIR }}
+        run: terraform validate
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
+      - name: Terraform Plan
+        id: plan
+        working-directory: ${{ steps.tf_dir.outputs.TF_DIR }}
+        run: terraform plan 
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+    
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/"master"'
+        working-directory: ${{ steps.tf_dir.outputs.TF_DIR }}
+        run: terraform apply -auto-approve -input=false
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+    

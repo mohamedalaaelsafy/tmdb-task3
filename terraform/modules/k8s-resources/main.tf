@@ -96,7 +96,8 @@ resource "helm_release" "ingress_nginx" {
   repository = "https://kubernetes.github.io/ingress-nginx"
   chart      = "ingress-nginx"
   version    = var.ingress_version
-  create_namespace = true 
+  create_namespace = true
+  namespace = "ingress-nginx"
 
   set {
     name  = "installCRDs"
