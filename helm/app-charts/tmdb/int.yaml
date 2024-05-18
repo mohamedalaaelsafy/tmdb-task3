@@ -27,8 +27,8 @@ base-chart:
         cpu: 30m
         memory: 10Mi
       limits:
-        cpu: 100m
-        memory: 300Mi
+        cpu: 200m
+        memory: 800Mi
     ports:
     - name: app-port
       containerPort: 3000
