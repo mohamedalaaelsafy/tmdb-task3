@@ -88,7 +88,7 @@ module "k8s-resources" {
   install_namespaces = true
   namespaces         = ["int"]
 
-  install_argocd   = true
+  install_argocd   = false
   argocd_version   = "5.24.0"
   argocd_namespace = "argocd"
   argocd_project   = ""
@@ -98,7 +98,7 @@ module "k8s-resources" {
   argocd_set_vars  = []
 
 
-  install_ingress  = true
+  install_ingress  = false
   ingress_version  = "4.0.17"
   ingress_set_vars = []
 
