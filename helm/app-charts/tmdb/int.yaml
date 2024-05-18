@@ -1,6 +1,6 @@
 base-chart:
-  name: tmdb-app
   namespace: int
+  serviceName: tmdb-app
 
   ingress:
     ingressClassName: nginx
@@ -17,9 +17,9 @@ base-chart:
           port: 3000
 
   deployment:
-    annotations: {}
     image: us-central1-docker.pkg.dev/hamzahllc-technical-task/tmdb-tasks/tmdb-app
     tag: latest
+    replicaCount: 1
     restartPolicy: Always
     serviceAccountName: {}
     resources:
@@ -29,6 +29,10 @@ base-chart:
       limits:
         cpu: 200m
         memory: 800Mi
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 3000
     ports:
     - name: app-port
       containerPort: 3000

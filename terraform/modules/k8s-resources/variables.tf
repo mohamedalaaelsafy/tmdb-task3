@@ -1,4 +1,15 @@
 ################################
+#       Global Variables       #
+################################
+variable "project_id" { type = string }
+
+variable "region" { type = string  }
+
+variable "app" { type = string }
+
+variable "env" { type = string }
+
+################################
 #   K8s Resources Variables    #
 ################################
 

@@ -80,13 +80,18 @@ module "k8s-resources" {
     helm       = helm.helm
   }
 
+  project_id = var.project_id
+  env        = var.env
+  region     = var.region
+  app        = var.app
+
   install_namespaces = true
   namespaces         = ["int"]
 
   install_argocd   = true
   argocd_version   = "5.24.0"
   argocd_namespace = "argocd"
-  # argocd_project   = "k8s-manifest/argocd/argocd-project.yaml"
+  argocd_project   = ""
   argocd_app       = "k8s-manifest/argocd/argocd-app.yaml"
   argocd_cm        = "k8s-manifest/argocd/argocd-cm.yaml"
   argocd_secret    = ""

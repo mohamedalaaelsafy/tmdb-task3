@@ -2,29 +2,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.name }}
-  namespace: {{ .Values.namespace | lower }}
+  name: {{ .Values.serviceName }}
+  namespace: {{ .Values.namespace | default ""}}
   labels:
-    app: {{ .Values.name }}
+    app: {{ .Values.serviceName }}
     {{- if .Values.deployment.annotations }}
   annotations:
     {{- toYaml .Values.deployment.annotations | nindent 4 }}
     {{- end }}
 spec:
-  replicas: {{ .Values.deployment.replicaCount }}
+  {{- if .Values.deployment.replicas }}
+  replicas: {{ .Values.deployment.replicas }}
+  {{- end }}
   selector:
     matchLabels:
-      app: {{ .Values.name }}
+      app: {{ .Values.serviceName }}
   template:
     metadata:
       labels:
-        app: {{ .Values.name }}
+        app: {{ .Values.serviceName }}
     spec:
-      {{- if .Values.deployment.securityContext }}
-      securityContext:
-        fsGroup: {{ .Values.deployment.securityContext.fsGroup  }}
-        runAsUser: {{ .Values.deployment.securityContext.runAsUser }}
-      {{- end }}
       {{- if .Values.deployment.tolerations }}
       tolerations:
       {{- range $value := .Values.deployment.tolerations }}
@@ -38,10 +35,20 @@ spec:
       nodeSelector:
         type: {{ .Values.deployment.nodeSelector.type }}
       {{- end }}
+      {{- if .Values.deployment.restartPolicy }}
+      restartPolicy: {{ .Values.deployment.restartPolicy | default  "Always"}}
+      {{- end }}
+      {{- if .Values.deployment.serviceAccountName }}
+      serviceAccountName: {{ .Values.deployment.serviceAccountName }} 
+      {{- end }}
       containers:
       - image: {{ .Values.deployment.image }}:{{ .Values.deployment.tag }}
         imagePullPolicy: {{ .Values.deployment.pullPolicy | default  "Always"}}
-        name: {{ .Values.name }}
+        name: {{ .Values.serviceName }}
+        {{- if .Values.deployment.securityContext }}
+        securityContext:
+          {{- toYaml .Values.deployment.securityContext | nindent 10 }}
+        {{- end }}
         {{- if .Values.deployment.resources }}
         resources:
         {{- toYaml .Values.deployment.resources | nindent 10 }}
@@ -52,7 +59,8 @@ spec:
         {{- if .Values.deployment.args }}
         args: {{ .Values.deployment.args }}
         {{- end }}
-
+        {{- include "livenessProbe" . | trim | nindent 8  }}
+        {{- include "readinessProbe" . | trim | nindent 8 }} 
         {{- if .Values.deployment.env }}
         env:
         {{- range $value := .Values.deployment.env }}
@@ -68,7 +76,7 @@ spec:
           name: {{ $value.name }}
         {{- end }}
         {{- end }}
-        {{- end }}
+        {{- end }}     
       {{- if and (.Values.deployment.volumeMounts) (.Values.deployment.volumes) }}
         volumeMounts:
         {{- range $value := .Values.deployment.volumeMounts }}
@@ -80,13 +88,7 @@ spec:
           {{- if $value.readOnly }}
           readOnly: {{ $value.readOnly }}
           {{- end }}
-        {{- end }}
-      {{- if .Values.deployment.restartPolicy }}   
-      restartPolicy: {{ .Values.deployment.restartPolicy | default  "Always"}}
-      {{- end }}
-      {{- if .Values.deployment.serviceAccountName }}
-      serviceAccountName: {{ .Values.deployment.serviceAccountName }} 
-      {{- end }}               
+        {{- end }}              
       volumes:
         {{- range $value := .Values.deployment.volumes }}
         - name: {{ $value.name }}
@@ -101,9 +103,6 @@ spec:
         {{- else if $value.persistentVolumeClaim }}
           persistentVolumeClaim:
             claimName: {{ $value.persistentVolumeClaim.claimName }}
-        {{- else if $value.hostPath }}
-          hostPath:
-            path: {{ $value.hostPath.path }}
         {{- end }}   
         {{- end }}
       {{- end }}

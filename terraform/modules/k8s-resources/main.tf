@@ -96,10 +96,16 @@ resource "helm_release" "ingress_nginx" {
   repository = "https://kubernetes.github.io/ingress-nginx"
   chart      = "ingress-nginx"
   version    = var.ingress_version
+  create_namespace = true 
 
   set {
     name  = "installCRDs"
     value = "true"
+  }
+
+  set {
+    name  = "controller.service.loadBalancerIP"
+    value = "35.225.177.188"
   }
   dynamic "set" {
     for_each = var.ingress_set_vars
@@ -120,32 +126,13 @@ resource "kubectl_manifest" "ingress-argocd" {
 }
 
 
-
-
-
-
-
-
-
-
-
-# resource "helm_release" "nginx_ingress" {
-#   provider = helm
-#   count              = var.install_ingress ? 1 : 0
-#   name       = "nginx-ingress"
-#   repository = "https://kubernetes.github.io/ingress-nginx"
-#   chart      = "ingress-nginx"
-#   # version    = " 1.2.1"  # Use an appropriate version
-
-#   # dynamic "set" {
-#   #   for_each = var.ingress_set_vars
-#   #   content {
-#   #     name  = set.value.name
-#   #     value = set.value.value
-#   #   }
-#   # }
-
-#   # values = [
-#   #   "${file("${var.ingress_value_file}")}"
-#   # ]
-# } 
+################################
+#         IP Resource          #
+################################
+# resource "google_compute_address" "ip" {
+#   count = var.install_ingress ? 1 : 0
+#   project = var.project_id
+#   name    = "${var.app}-${var.env}-ingrees-ip"
+#   region  = var.region
+ 
+# }
