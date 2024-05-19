@@ -21,11 +21,12 @@ defaults:
 jobs:
 
   terraform_apply:
-    environment: dev
+    environment: int
     permissions: # Necessary for workload identity provider
       contents: 'read'
       id-token: 'write'
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v4
 
